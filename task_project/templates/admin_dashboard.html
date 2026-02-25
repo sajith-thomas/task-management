@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<h2>Your Users</h2>
+<ul>
+    {% for user in users %}
+        <li>{{ user.username }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Your Tasks</h2>
+<ul>
+    {% for task in tasks %}
+        <li>
+            {{ task.title }} - {{ task.status }}
+            {% if task.status == "Completed" %}
+                <br>Report: {{ task.completion_report }}
+                <br>Worked Hours: {{ task.worked_hours }}
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>

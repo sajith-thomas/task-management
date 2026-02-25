@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .profile-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .profile-info p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-card .number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .stat-card .label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th {
+            background: #007bff;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .status-pending {
+            background: #ffc107;
+            color: #333;
+        }
+        .status-in_progress {
+            background: #17a2b8;
+            color: white;
+        }
+        .status-completed {
+            background: #28a745;
+            color: white;
+        }
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        .tab.active {
+            background: #007bff;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .report-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #28a745;
+        }
+        .report-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .report-meta {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .report-content {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .report-hours {
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        /* Add Task Form Styles */
+        .add-task-form {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 0 2px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+        .btn-info:hover {
+            background: #138496;
+        }
+        .add-task-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .add-task-btn:hover {
+            background: #218838;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #333;
+        }
+        .modal h3 {
+            margin-top: 0;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Profile</h2>
+    
+    <!-- Display Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="profile-info">
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Role:</strong> <span class="status-badge">{{ user.profile.role }}</span></p>
+        <p><strong>Member Since:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+        <p><strong>Last Login:</strong> {{ user.last_login|date:"F j, Y H:i" }}</p>
+        
+        {% if user.profile.assigned_admin %}
+        <p><strong>Assigned Admin:</strong> {{ user.profile.assigned_admin.username }}</p>
+        {% endif %}
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="number">{{ total_tasks }}</div>
+            <div class="label">Total Tasks</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">{{ pending_tasks }}</div>
+            <div class="label">Pending</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">{{ in_progress_tasks }}</div>
+            <div class="label">In Progress</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">{{ completed_tasks }}</div>
+            <div class="label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="number">{{ total_hours }}</div>
+            <div class="label">Total Hours</div>
+        </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab active" onclick="showTab('tasks')">📋 My Tasks</button>
+        <button class="tab" onclick="showTab('reports')">📊 My Reports</button>
+        <button class="tab" onclick="showTab('add')">➕ Add Task</button>
+    </div>
+    
+    <!-- Tasks Tab -->
+    <div id="tasks" class="tab-content active">
+        <h3>My Tasks</h3>
+        
+        {% if tasks %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Hours</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.description|truncatechars:50 }}</td>
+                    <td>{{ task.due_date|date:"Y-m-d" }}</td>
+                    <td>
+                        <span class="status-badge status-{{ task.status }}">
+                            {{ task.get_status_display|default:task.status|title }}
+                        </span>
+                    </td>
+                    <td>{{ task.worked_hours|default:"-" }}</td>
+                    <td class="action-buttons">
+                        {% if task.status != 'completed' %}
+                            <button class="btn btn-warning btn-sm" onclick="openUpdateModal({{ task.id }}, '{{ task.title }}', '{{ task.status }}')">✏️ Update</button>
+                        {% else %}
+                            <button class="btn btn-info btn-sm" onclick="viewReport({{ task.id }})">👁️ View Report</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="text-align: center; padding: 30px; color: #666;">No tasks assigned yet.</p>
+        {% endif %}
+    </div>
+    
+    <!-- Reports Tab -->
+    <div id="reports" class="tab-content">
+        <h3>My Completion Reports</h3>
+        
+        {% if completed_tasks_list %}
+            {% for task in completed_tasks_list %}
+            <div class="report-card">
+                <div class="report-title">{{ task.title }}</div>
+                <div class="report-meta">
+                    Completed on: {{ task.updated_at|date:"F j, Y H:i" }}
+                </div>
+                <div class="report-content">
+                    {{ task.completion_report|default:"No report provided" }}
+                </div>
+                <div>
+                    <span class="report-hours">⏱️ {{ task.worked_hours }} hours worked</span>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <p style="text-align: center; padding: 30px; color: #666;">No completed tasks yet.</p>
+        {% endif %}
+    </div>
+    
+    <!-- Add Task Tab -->
+    <div id="add" class="tab-content">
+        <h3>Add New Task</h3>
+        
+        <div class="add-task-form">
+            <form method="POST" action="{% url 'add_task' %}">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label>Title *</label>
+                    <input type="text" name="title" required placeholder="Enter task title">
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" placeholder="Enter task description"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Due Date *</label>
+                    <input type="date" name="due_date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status">
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                
+                <!-- Hidden field that automatically uses logged-in user -->
+                <input type="hidden" name="user_id" value="{{ user.id }}">
+
+                <!-- Display message showing who task is assigned to -->
+                <div class="form-group">
+                    <label>Assign To</label>
+                    <input type="text" value="{{ user.username }}" class="form-control" readonly disabled>
+                    <small style="color: #666; display: block; margin-top: 5px;">Task will be assigned to you</small>
+                </div>
+                
+                <div class="form-group">
+                    <label>Completion Report (if completed)</label>
+                    <textarea name="completion_report" placeholder="Enter completion details"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Worked Hours</label>
+                    <input type="number" name="worked_hours" step="0.1" placeholder="Enter hours worked">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Create Task</button>
+            </form>
+        </div>
+    </div>
+    
+    <a href="{% url 'logout' %}" class="logout-btn" onclick="return confirm('Are you sure you want to logout?')">Logout</a>
+</div>
+
+<!-- Update Task Modal -->
+<div id="updateModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Update Task Status</h3>
+        <form method="POST" action="" id="updateForm">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Task: <span id="taskTitle"></span></label>
+            </div>
+            
+            <div class="form-group">
+                <label>Status</label>
+                <select name="status" id="taskStatus" onchange="toggleCompletionFields()">
+                    <option value="pending">Pending</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+            
+            <div id="completionFields" style="display: none;">
+                <div class="form-group">
+                    <label>Completion Report *</label>
+                    <textarea name="completion_report" id="completionReport" placeholder="Describe what you completed"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Worked Hours *</label>
+                    <input type="number" name="worked_hours" id="workedHours" step="0.1" placeholder="Enter hours worked">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Update Task</button>
+            <button type="button" class="btn btn-warning" onclick="closeModal()">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showTab(tabName) {
+        // Hide all tabs
+        document.getElementById('tasks').classList.remove('active');
+        document.getElementById('reports').classList.remove('active');
+        document.getElementById('add').classList.remove('active');
+        
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        
+        // Show selected tab
+        document.getElementById(tabName).classList.add('active');
+        
+        // Add active class to clicked button
+        event.target.classList.add('active');
+    }
+    
+    // Set default date to today
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.querySelector('input[type="date"]');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+        }
+    });
+    
+    // Modal functions
+    function openUpdateModal(taskId, taskTitle, currentStatus) {
+        document.getElementById('updateModal').style.display = 'block';
+        document.getElementById('taskTitle').textContent = taskTitle;
+        document.getElementById('taskStatus').value = currentStatus;
+        document.getElementById('updateForm').action = `/update-task/${taskId}/`;
+        
+        // Show/hide completion fields based on status
+        toggleCompletionFields();
+    }
+    
+    function closeModal() {
+        document.getElementById('updateModal').style.display = 'none';
+    }
+    
+    function toggleCompletionFields() {
+        const status = document.getElementById('taskStatus').value;
+        const completionFields = document.getElementById('completionFields');
+        
+        if (status === 'completed') {
+            completionFields.style.display = 'block';
+            document.getElementById('completionReport').required = true;
+            document.getElementById('workedHours').required = true;
+        } else {
+            completionFields.style.display = 'none';
+            document.getElementById('completionReport').required = false;
+            document.getElementById('workedHours').required = false;
+        }
+    }
+    
+    function viewReport(taskId) {
+        window.location.href = `/task-report/${taskId}/`;
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('updateModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>

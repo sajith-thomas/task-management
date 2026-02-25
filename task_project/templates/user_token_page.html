@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your API Tokens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .welcome {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+        }
+        
+        .token-card {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .token-label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        
+        .token-value {
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            right: 35px;
+            top: 85px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .copy-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .endpoint-section {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .endpoint {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border: 1px solid #eee;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+        
+        .method.get { background: #e3f2fd; color: #1565c0; }
+        .method.put { background: #fff3e0; color: #ef6c00; }
+        .method.post { background: #e8f5e9; color: #2e7d32; }
+        
+        .url {
+            font-family: monospace;
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .curl-example {
+            background: #263238;
+            color: #b0bec5;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #e53e3e;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #718096;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🔑 API Access Tokens</h2>
+        <div class="welcome">Welcome, <strong>{{ username }}</strong>!</div>
+        
+        <div class="info-box">
+            <strong>📌 Note:</strong> Regular users access the system via API only. 
+            Use these tokens to authenticate your API requests.
+        </div>
+        
+        <div class="warning">
+            ⚠️ <strong>Important:</strong> Save these tokens securely. 
+            You won't be able to see them again!
+        </div>
+        
+        <!-- Access Token -->
+        <div class="token-card">
+            <div class="token-label">🔑 Access Token (expires in 60 minutes)</div>
+            <div class="token-value" id="accessToken">
+                {{ access_token }}
+            </div>
+            <button class="copy-btn" onclick="copyToken('accessToken')">Copy</button>
+        </div>
+        
+        <!-- Refresh Token -->
+        <div class="token-card">
+            <div class="token-label">🔄 Refresh Token (use to get new access token)</div>
+            <div class="token-value" id="refreshToken">
+                {{ refresh_token }}
+            </div>
+            <button class="copy-btn" onclick="copyToken('refreshToken')">Copy</button>
+        </div>
+        
+        <!-- API Endpoints -->
+        <div class="endpoint-section">
+            <h3>📡 Available API Endpoints</h3>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span> <strong>Get Your Tasks</strong>
+                <div class="url">GET /api/tasks/</div>
+                <div class="curl-example">
+# Get all tasks assigned to you
+curl -X GET http://localhost:8000/api/tasks/ \
+  -H "Authorization: Bearer {{ access_token|slice:":20" }}..." \
+  -H "Content-Type: application/json"
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method put">PUT</span> <strong>Update Task Status</strong>
+                <div class="url">PUT /api/tasks/{task_id}/</div>
+                <div class="curl-example">
+# Mark task as completed with report
+curl -X PUT http://localhost:8000/api/tasks/1/ \
+  -H "Authorization: Bearer {{ access_token|slice:":20" }}..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "COMPLETED",
+    "completion_report": "Task completed successfully",
+    "worked_hours": 2.5
+  }'
+                </div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span> <strong>Refresh Token</strong>
+                <div class="url">POST /api/token/refresh/</div>
+                <div class="curl-example">
+# Get new access token using refresh token
+curl -X POST http://localhost:8000/api/token/refresh/ \
+  -H "Content-Type: application/json" \
+  -d '{"refresh": "{{ refresh_token|slice:":20" }}..."}'
+                </div>
+            </div>
+        </div>
+        
+        <!-- Python Example -->
+        <div class="endpoint-section">
+            <h3>🐍 Python Example</h3>
+            <div class="curl-example">
+import requests
+
+# Your token
+token = "{{ access_token|slice:":20" }}..."
+
+# Headers
+headers = {
+    'Authorization': f'Bearer {token}',
+    'Content-Type': 'application/json'
+}
+
+# Get your tasks
+response = requests.get('http://localhost:8000/api/tasks/', headers=headers)
+tasks = response.json()
+print(tasks)
+
+# Complete a task
+task_data = {
+    'status': 'COMPLETED',
+    'completion_report': 'Implemented feature X',
+    'worked_hours': 3.5
+}
+response = requests.put('http://localhost:8000/api/tasks/1/', 
+                       json=task_data, 
+                       headers=headers)
+print(response.json())
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <a href="{% url 'user_logout' %}" class="btn btn-danger">🚪 Logout</a>
+            <a href="{% url 'profile' %}" class="btn btn-secondary">👤 Profile</a>
+        </div>
+    </div>
+    
+    <script>
+        function copyToken(elementId) {
+            const tokenValue = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(tokenValue).then(function() {
+                alert('Token copied to clipboard!');
+            }, function() {
+                alert('Failed to copy token');
+            });
+        }
+    </script>
+</body>
+</html>
